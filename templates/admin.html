@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <h2>Manage Tickets</h2>
+        <ul>
+            {% for ticket in tickets %}
+            <li>
+                <strong>{{ ticket.id }} - {{ ticket.priority }}:</strong> {{ ticket.issue_description }} (Status: {{ ticket.status }})
+                <form action="/update_ticket_status/{{ ticket.id }}" method="POST" style="display:inline;">
+                    <select name="status">
+                        <option value="Open" {% if ticket.status == 'Open' %}selected{% endif %}>Open</option>
+                        <option value="In Progress" {% if ticket.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                        <option value="Resolved" {% if ticket.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                    </select>
+                    <button type="submit">Update Status</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        <br><br>
+        <a href="/">Back to Home</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</body>
+</html>

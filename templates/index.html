@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Desk Ticketing System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Submit a Ticket</h1>
+        <form action="/submit_ticket" method="POST">
+            <label for="issue_description">Issue Description:</label><br>
+            <textarea name="issue_description" id="issue_description" rows="4" cols="50" required></textarea><br><br>
+            <label for="priority">Priority:</label><br>
+            <select name="priority" id="priority">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select><br><br>
+            <button type="submit">Submit Ticket</button>
+        </form>
+
+        <h2>Existing Tickets</h2>
+        <ul>
+            {% for ticket in tickets %}
+            <li>
+                <strong>{{ ticket.id }} - {{ ticket.priority }}:</strong> {{ ticket.issue_description }} (Status: {{ ticket.status }})
+                <!-- Form to update status -->
+                <form action="/update_ticket_status/{{ ticket.id }}" method="POST" style="display:inline;">
+                    <select name="status">
+                        <option value="Open" {% if ticket.status == 'Open' %}selected{% endif %}>Open</option>
+                        <option value="In Progress" {% if ticket.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                        <option value="Resolved" {% if ticket.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                    </select>
+                    <button type="submit">Update Status</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
